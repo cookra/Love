@@ -1,0 +1,143 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('Love:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+var server = http.createServer(app);
+
+
+/**
+* Create the socket.io object and listener
+*/
+var io = require('socket.io').listen(server);
+
+
+/**
+* track from Twitter strea and emit tweet data
+*/
+io.sockets.on('connection', function (socket) {
+  client.stream('statuses/filter', {track: '#love'},  function(stream){
+    stream.on('data', function(obj) {
+        clientStream = client.stream;
+        // console.log(tweet.text);
+        socket.emit('sending-data', { tweetText: obj.text, userName:obj.user.screen_name });
+    });
+    stream.on('error', function(error) {
+      // console.log(error);
+    });
+  });
+
+
+  socket.emit('init', { message: "init" });
+
+  // stream.on('connection', function(socket) {
+  //   socket.emit('init', { message: "init" });
+  // }
+
+});
+
+
+var Twitter = require('twitter');
+
+/**
+* Set up the twitter client containing keys and scerets
+*/
+var client = new Twitter({
+  consumer_key: '4yxHTOFqOttfARNdQdJnIpfLO',
+  consumer_secret: 'h2pFcwAGKwISeCaI0be0jKyh4ThlLZWOKjIHMvJLe2bWl7hJqQ',
+  access_token_key: '470012453-4ZXWRfZx7KPY4iccvtQhov1PL9yNOVTvHPg89qqz',
+  access_token_secret: 'Ej3AYPj3za78D8zzMalm5WORD2ET6V7QH9vuT1d2fgbs1'
+});
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

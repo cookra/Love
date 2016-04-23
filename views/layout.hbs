@@ -1,0 +1,104 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Love</title>
+
+    <link rel="stylesheet" href="/stylesheets/lib/material.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel='stylesheet' href='/stylesheets/mod/style.css' />
+
+  </head>
+  <body>
+
+    <div class="demo-layout mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+      <header class="demo-header mdl-layout__header mdl-layout__header--scroll mdl-color--grey-100 mdl-color-text--grey-800">
+        <div class="mdl-layout__header-row">
+          <span class="mdl-layout-title">#love</span>
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+      <div class="demo-ribbon">
+
+        <div id="webgl" class="webgl"></div>
+
+        <div class="video-asset">
+          <video id="video" autoplay loop>
+              <source src="/videos/Adore_You_800kbps.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+      <main class="demo-main mdl-layout__content">
+
+        <div class="demo-container mdl-grid">
+
+          <button id="playPauseToggle" class="play-pause-toggle mdl-button mdl-js-button mdl-button--fab mdl-button--accent mdl-js-ripple-effect">
+            <div class="spinner-wrapper">
+              <div id="spinner" class="mdl-spinner mdl-js-spinner mdl-spinner--single-color is-active"></div>
+            </div>
+            <div id="toggleWrapper" class="hide-me toggle-wrapper">
+              <i id="playToggle" class="hide-me material-icons md-48">play_arrow</i>
+              <i id="pauseToggle" class="hide-me material-icons md-48">pause</i>
+            </div>
+          </button>
+
+          <div class="demo-content mdl-color--white mdl-shadow--4dp content mdl-color-text--grey-800 mdl-cell mdl-cell--12-col">
+            <h2>#love</h2>
+            <h4>This is a Twitter STREAMING API demo that tracks mentions of #love</h4>
+            <div class="mdl-layout-spacer"></div>
+            <!-- data from io in index.hbs -->
+            <div id="dataDiv"></div>
+          </div>
+        </div>
+        <footer class="demo-footer mdl-mini-footer">
+          <div class="mdl-mini-footer--left-section">
+            <ul class="mdl-mini-footer--link-list">
+
+            </ul>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <!-- Node modules -->
+    <script  type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+    <!-- Libraries -->
+    <script type="text/javascript" src="/javascripts/lib/material.min.js"></script>
+    <script type="text/javascript" src="javascripts/lib/typedarray.js"></script>
+    <script type="text/javascript" src="javascripts/lib/three.min.js"></script>
+    <script type="text/javascript" src="javascripts/lib/ColladaLoader.js"></script>
+    <script type="text/javascript" src="javascripts/lib/BokehShader2.js"></script>
+
+    <!-- <script type="text/javascript" src="javascripts/lib/TweenMax.min.js"></script> -->
+
+    <!-- <script type="text/javascript" src="javascripts/lib/physi.js"></script>
+    <script type="text/javascript" src="javascripts/lib/physijs_worker.js"></script> -->
+
+
+    <!-- Modules -->
+    <script type="text/javascript" src="/javascripts/mod/utils.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/socket.js"></script>
+
+    <script type="text/javascript" src="/javascripts/mod/jsonLoader.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/colladaLoader.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/hearts.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/environment.js"></script>
+
+
+    <script type="text/javascript" src="/javascripts/mod/cube.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/lights.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/camera.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/renderer.js"></script>
+    <script type="text/javascript" src="/javascripts/mod/postProcessing.js"></script>
+
+    <script type="text/javascript" src="/javascripts/mod/init.js"></script>
+
+
+  </body>
+</html>
