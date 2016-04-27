@@ -18,13 +18,13 @@ var App = App || {};
       App.log("App.socket.on.connection");
       // if stream is connected carry on
       App.config.running = true;
-      App.createListeners();
+      App.addListeners();
       App.renderer.init();
     });
 
     App.listen.on('sending-data', function (data) {
     if(App.config.running === true){
-          App.socket.callOnce();
+        App.socket.callOnce();
         App.socket.createDomElement(data);
         App.hearts.clone();
       }
@@ -39,12 +39,11 @@ var App = App || {};
   * @return {void}
   */
   App.socket.callOnce = function (){
-    var called = false;
-    if(called === false){
+    if(App.config.connectCalled == false){
       App.dom.spinner.style.display = "none";
-      App.dom.toggleWrapper.style.display = "block";
-      App.dom.pauseToggle.style.display = "block";
-      called = true;
+      App.dom.toggle.style.display = "block";
+      App.dom.pauseIcon.style.display = "block";
+      App.config.connectCalled = true;
     }
   }
 
@@ -61,9 +60,13 @@ var App = App || {};
     tweetEle.className = "tweet-ele transition"
     // tweetEle.style.backgroundColor = "#e41969";
 
-    var h5 = document.createElement('h5');
-    tweetEle.appendChild(h5);
-    h5.innerHTML = data.userName;
+    var tweetEleBg = document.createElement('div');
+    tweetEleBg.className = "tweet-ele-bg";
+    tweetEle.appendChild(tweetEleBg);
+
+    var h2 = document.createElement('h2');
+    tweetEle.appendChild(h2);
+    h2.innerHTML = data.userName;
 
     var p = document.createElement('p');
     tweetEle.appendChild(p);
@@ -80,28 +83,28 @@ var App = App || {};
     //split it baby
     var colors = color.split("|");
 
-    if (colors.indexOf("love") > -1) {
-        str = str.replace(/love/g, '<span class="love">love</span>');
-    }
-
-    if (colors.indexOf("Love") > -1) {
-        str = str.replace(/Love/g, '<span class="love">love</span>');
-    }
-
-    if (colors.indexOf("LOVE") > -1) {
-        str = str.replace(/LOVE/g, '<span class="love">love</span>');
-    }
+    // if (colors.indexOf("love") > -1) {
+    //     str = str.replace(/love/g, '<span class="love">Love</span>');
+    // }
+    //
+    // if (colors.indexOf("Love") > -1) {
+    //     str = str.replace(/Love/g, '<span class="love">Love</span>');
+    // }
+    //
+    // if (colors.indexOf("LOVE") > -1) {
+    //     str = str.replace(/LOVE/g, '<span class="love">Love</span>');
+    // }
 
     if (colors.indexOf("#love") > -1) {
-        str = str.replace(/#love/g, '<span class="love">love</span>');
+        str = str.replace(/#love/g, '<span class="love">#Love</span>');
     }
 
     if (colors.indexOf("#Love") > -1) {
-        str = str.replace(/#Love/g, '<span class="love">love</span>');
+        str = str.replace(/#Love/g, '<span class="love">#Love</span>');
     }
 
     if (colors.indexOf("#LOVE") > -1) {
-        str = str.replace(/#LOVE/g, '<span class="love">love</span>');
+        str = str.replace(/#LOVE/g, '<span class="love">#Love</span>');
     }
 
     p.innerHTML = str;

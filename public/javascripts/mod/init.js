@@ -5,8 +5,12 @@ var App = App || {};
 
   App.config = {
     running: false,
-    webGLWidth: document.getElementById("webgl").offsetWidth,
-    webGLHeight: document.getElementById("webgl").offsetHeight
+    webGLWidth: window.innerWidth,
+    webGLHeight: window.innerHeight,
+    connectCalled: false,
+    menuStatus: "in"
+    // webGLWidth: document.getElementById("webgl").offsetWidth,
+    // webGLHeight: document.getElementById("webgl").offsetHeight
   };
 
   /**
@@ -19,13 +23,22 @@ var App = App || {};
     App.log("App.init");
 
     App.dom.dataDiv = document.getElementById('dataDiv');
-    App.dom.toggleWrapper = document.getElementById('toggleWrapper');
-    App.dom.playPauseToggle = document.getElementById('playPauseToggle');
-    App.dom.playToggle = document.getElementById('playToggle');
-    App.dom.pauseToggle = document.getElementById('pauseToggle');
     App.dom.spinner = document.getElementById('spinner');
 
-    App.dom.video = document.getElementById("video");
+    App.dom.fullScreen = document.getElementById('fullScreen');
+
+    App.dom.toggle = document.getElementById('toggle');
+    App.dom.pauseIcon = document.getElementById('pauseIcon');
+    App.dom.playIcon = document.getElementById('playIcon');
+
+    App.dom.video = document.getElementById('video');
+
+    App.dom.playPauseButton = document.getElementById('playPauseButton');
+    App.dom.sideWrapperBg = document.getElementById('sideWrapperBg');
+    App.dom.sideWrapper = document.getElementById('sideWrapper');
+
+
+
 
 
     App.three = new THREE.Scene();
@@ -38,9 +51,9 @@ var App = App || {};
     App.lights.init();
   	App.postProcessing.init();
     App.colladaLoader.init();
+
     // step 1
       App.jsonLoader.init();
-      App.dom.video.play();
 
     // step 2 App.socket.init();
     // socket.init is called from jsonloader callback
@@ -58,26 +71,57 @@ var App = App || {};
   * @method createListeners
   * @return {void}
   */
-  App.createListeners = function(){
-    App.log("App.createListeners");
+  App.addListeners = function(){
+    App.log("App.addListeners");
 
-    App.dom.playPauseToggle.addEventListener('click', function(){
-
+    App.dom.toggle.addEventListener('click', function(){
       if(App.config.running == true){
+
+        if(App.dom.video.paused == false){
+          App.dom.video.pause();
+        }
+
         App.config.running = App.config.running = false
-        App.dom.pauseToggle.style.display = "none";
-        App.dom.playToggle.style.display = "block";
+        App.dom.pauseIcon.style.display = "none";
+        App.dom.playIcon.style.display = "block";
+
       }else{
+
+        if(App.dom.video.paused == true){
+          App.dom.video.play();
+        }
+
         App.config.running = true;
-        App.dom.playToggle.style.display = "none";
-        App.dom.pauseToggle.style.display = "block";
+        App.dom.playIcon.style.display = "none";
+        App.dom.pauseIcon.style.display = "block";
+      }
+      App.log("toggle - clicked "+App.config.running);
+    });
+
+    App.dom.fullScreen.addEventListener('click', function(){
+
+      if(App.config.menuStatus == "in"){
+        App.config.menuStatus = "out";
+        App.dom.playPauseButton.style.left = -60+'px';
+        App.dom.sideWrapperBg.style.left = -365+'px';
+        App.dom.sideWrapper.style.left = -365+'px';
+      }else{
+        App.config.menuStatus = "in";
+        App.dom.playPauseButton.style.left = 310+'px';
+        App.dom.sideWrapperBg.style.left = 0+'px';
+        App.dom.sideWrapper.style.left = 0+'px';
       }
 
-      App.log('playPauseToggle - '+App.config.running);
 
+
+      App.log("fullscreen - clicked");
     });
 
   }
+
+
+
+
 
 
   /**
@@ -89,13 +133,15 @@ var App = App || {};
   window.onresize = function(){
     App.log("window.onresize");
 
-    App.config.webGLWidth = App.dom.webgl.offsetWidth;
-    App.config.webGLHeight = App.dom.webgl.offsetHeight;
+    // App.config.webGLWidth = App.dom.webgl.offsetWidth;
+    // App.config.webGLHeight = App.dom.webgl.offsetHeight;
+
+    App.config.webGLWidth = window.innerWidth;
+    App.config.webGLHeight = window.innerHeight;
 
     if(App.three.renderer) App.three.renderer.setSize(App.config.webGLWidth, App.config.webGLHeight);
     if(App.three.camera) App.camera.update();
   };
-
 
   /**
   * be polite, wait for page load.
