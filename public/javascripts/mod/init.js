@@ -8,7 +8,9 @@ var App = App || {};
     webGLWidth: window.innerWidth,
     webGLHeight: window.innerHeight,
     connectCalled: false,
-    menuStatus: "in"
+    menuStatus: "in",
+    hidden: false,
+    media: ""
     // webGLWidth: document.getElementById("webgl").offsetWidth,
     // webGLHeight: document.getElementById("webgl").offsetHeight
   };
@@ -24,29 +26,32 @@ var App = App || {};
 
     App.dom.dataDiv = document.getElementById('dataDiv');
     App.dom.spinner = document.getElementById('spinner');
-
     App.dom.fullScreen = document.getElementById('fullScreen');
-
     App.dom.toggle = document.getElementById('toggle');
     App.dom.pauseIcon = document.getElementById('pauseIcon');
     App.dom.playIcon = document.getElementById('playIcon');
-
-    App.dom.video = document.getElementById('video');
-
     App.dom.playPauseButton = document.getElementById('playPauseButton');
     App.dom.sideWrapperBg = document.getElementById('sideWrapperBg');
     App.dom.sideWrapper = document.getElementById('sideWrapper');
-
     App.dom.fullScreenOut = document.getElementById('fullScreenOut');
     App.dom.fullScreenIn = document.getElementById('fullScreenIn');
-
     App.dom.promoWrapper = document.getElementById('promoWrapper');
-
-
-    App.three = new THREE.Scene();
-
     App.dom.webgl = document.getElementById("webgl");
 
+    Modernizr.on('videoautoplay', function(result) {
+      App.log("Modernizr.on.videoautoplay "+result);
+      if (result) {
+        App.config.media = "video";
+        App.addVideo();
+        // App.config.media = "audio";
+        // App.addFallback();
+      } else {
+        App.addFallback();
+        App.config.media = "audio";
+      }
+    });
+
+    App.three = new THREE.Scene();
     App.camera.init();
     App.lights.init();
 
@@ -73,36 +78,15 @@ var App = App || {};
     App.log("App.addListeners");
 
     App.dom.toggle.addEventListener('click', function(){
-      if(App.config.running == true){
-
-        if(App.dom.video.paused == false){
-          App.dom.video.pause();
-        }
-
-        App.config.running = App.config.running = false
-        App.dom.pauseIcon.style.display = "none";
-        App.dom.playIcon.style.display = "block";
-
-      }else{
-
-        if(App.dom.video.paused == true){
-          App.dom.video.play();
-        }
-
-        App.config.running = true;
-        App.dom.playIcon.style.display = "none";
-        App.dom.pauseIcon.style.display = "block";
-      }
-      App.log("toggle - clicked "+App.config.running);
+      App.pauseApp("click");
     });
 
     App.dom.fullScreen.addEventListener('click', function(){
-
       if(App.config.menuStatus == "in"){
         App.config.menuStatus = "out";
         App.dom.fullScreenOut.style.opacity = 0;
         App.dom.fullScreenIn.style.opacity = 1;
-        App.dom.playPauseButton.style.left = -60+'px';
+        App.dom.playPauseButton.style.left = 20+'px';
         App.dom.sideWrapperBg.style.left = -365+'px';
         App.dom.sideWrapper.style.left = -365+'px';
         App.dom.promoWrapper.style.bottom = -360+'px'
@@ -116,14 +100,98 @@ var App = App || {};
         App.dom.promoWrapper.style.bottom = 30+'px'
       }
 
-
-
       App.log("fullscreen - clicked");
     });
 
+    document.addEventListener("visibilitychange", function() {
+      // App.log( document.visibilityState );
+      if(document.visibilityState == "hidden"){
+          App.pauseApp("document");
+      }
+    });
+  }
+
+  /**
+  * creates background video
+  *
+  * @method addVideo
+  * @return {void}
+  */
+  App.addVideo = function(){
+    App.log("App.addVideo");
+
+    // App.dom.video = document.getElementById('video');
+    App.dom.videoBg = document.getElementById('videoBg');
+
+    App.dom.video = document.createElement("video");
+    App.dom.video.setAttribute("id", "video");
+    // App.dom.video.setAttribute("autoplay", true);
+    App.dom.video.setAttribute("loop", true);
+    App.dom.video.setAttribute('poster','/videos/Adore_You_720x480.jpg');
+
+    App.dom.vidSource = document.createElement("source");
+    App.dom.vidSource.type = "video/mp4";
+    App.dom.vidSource.src = "/videos/Adore_You_720x480_800kbps.mp4";
+
+    App.dom.video.appendChild(App.dom.vidSource);
+    App.dom.videoBg.appendChild(App.dom.video);
+}
+
+  /**
+  * creates mp3 fallback
+  *
+  * @method addVideo
+  * @return {void}
+  */
+  App.addFallback = function(){
+    App.log("App.addFallback");
+
+    App.dom.audio = document.createElement("audio");
+    App.dom.audio.setAttribute("id", "audio");
+    // App.dom.audio.setAttribute("autoplay", true);
+    App.dom.audio.setAttribute("loop", true);
+
+    App.dom.audSource = document.createElement("source");
+    // App.dom.audSource.type = "audio/mp3";
+    App.dom.audSource.src = "/audio/Adore_You.mp3";
+
+    App.dom.audio.appendChild(App.dom.audSource);
   }
 
 
+
+
+  /**
+  * master function to pause all app elements - can be called from button or on visibilityState change
+  *
+  * @method createListeners
+  * @return {void}
+  */
+  App.pauseApp = function(trigger){
+    App.log("App.pauseApp "+trigger);
+
+    if(App.config.running == true){
+
+      if(App.dom[App.config.media].paused == false){
+        App.dom[App.config.media].pause();
+      }
+
+      App.config.running = App.config.running = false
+      App.dom.pauseIcon.style.display = "none";
+      App.dom.playIcon.style.display = "block";
+
+    }else if(App.config.running == false && trigger == "click"){
+
+      if(App.dom[App.config.media].paused == true){
+        App.dom[App.config.media].play();
+      }
+
+      App.config.running = true;
+      App.dom.playIcon.style.display = "none";
+      App.dom.pauseIcon.style.display = "block";
+    }
+
+  }
 
 
 

@@ -27,6 +27,7 @@ var App = App || {};
         App.socket.callOnce();
         App.socket.createDomElement(data);
         App.hearts.clone();
+        // App.socket.checkActiveTab();
       }
     });
 
@@ -39,13 +40,18 @@ var App = App || {};
   * @return {void}
   */
   App.socket.callOnce = function (){
+    App.log("App.socket.callOnce");
     if(App.config.connectCalled == false){
+      App.dom[App.config.media].play();
+      // App.dom.video.play();
+      // App.dom.audio.play();
       App.dom.spinner.style.display = "none";
       App.dom.toggle.style.display = "block";
       App.dom.pauseIcon.style.display = "block";
       App.config.connectCalled = true;
     }
   }
+
 
   /**
   * called on data received from socket, creates and appends dom elements.
