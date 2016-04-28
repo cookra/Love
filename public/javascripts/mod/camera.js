@@ -20,7 +20,6 @@ var App = App || {};
     App.three.camera = new THREE.PerspectiveCamera(App.camera.config.camFOV, App.config.webGLWidth/App.config.webGLHeight, App.camera.config.camNear, App.camera.config.camFar);
     App.three.camera.position.set(0, 0, 5);
     App.three.camera.lookAt(App.three.position);
-
   };
 
   /**

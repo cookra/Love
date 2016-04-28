@@ -25,7 +25,7 @@ App.hearts.init = function(){
   App.three.masterHeart.castShadow = true;
   App.three.masterHeart.receiveShadow = false;
   App.three.masterHeart.scale.set (1,1,1);
-  App.three.masterHeart.position.set (0,-0.3,-5);
+  App.three.masterHeart.position.set (0,-30.3,-5);
 
 }
 
@@ -66,7 +66,7 @@ App.hearts.clone = function(){
 
 
   App.three.clonedHeart.position.x = App.randRange(-30,30);
-  App.three.clonedHeart.position.y = App.randRange(-3,3);
+  App.three.clonedHeart.position.y = App.randRange(-10,10);
   App.three.clonedHeart.position.z = -50;
 
 

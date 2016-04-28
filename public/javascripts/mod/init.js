@@ -37,20 +37,18 @@ var App = App || {};
     App.dom.sideWrapperBg = document.getElementById('sideWrapperBg');
     App.dom.sideWrapper = document.getElementById('sideWrapper');
 
+    App.dom.fullScreenOut = document.getElementById('fullScreenOut');
+    App.dom.fullScreenIn = document.getElementById('fullScreenIn');
 
-
+    App.dom.promoWrapper = document.getElementById('promoWrapper');
 
 
     App.three = new THREE.Scene();
-    // App.three = new Physijs.Scene;
 
     App.dom.webgl = document.getElementById("webgl");
 
-    // App.cube.init();
     App.camera.init();
     App.lights.init();
-  	App.postProcessing.init();
-    App.colladaLoader.init();
 
     // step 1
       App.jsonLoader.init();
@@ -102,14 +100,20 @@ var App = App || {};
 
       if(App.config.menuStatus == "in"){
         App.config.menuStatus = "out";
+        App.dom.fullScreenOut.style.opacity = 0;
+        App.dom.fullScreenIn.style.opacity = 1;
         App.dom.playPauseButton.style.left = -60+'px';
         App.dom.sideWrapperBg.style.left = -365+'px';
         App.dom.sideWrapper.style.left = -365+'px';
+        App.dom.promoWrapper.style.bottom = -360+'px'
       }else{
         App.config.menuStatus = "in";
-        App.dom.playPauseButton.style.left = 310+'px';
+        App.dom.fullScreenOut.style.opacity = 1;
+        App.dom.fullScreenIn.style.opacity = 0;
+        App.dom.playPauseButton.style.left = 290+'px';
         App.dom.sideWrapperBg.style.left = 0+'px';
         App.dom.sideWrapper.style.left = 0+'px';
+        App.dom.promoWrapper.style.bottom = 30+'px'
       }
 
 

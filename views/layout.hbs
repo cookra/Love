@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Love</title>
+    <title>#Love</title>
 
     <link rel='stylesheet' href='/stylesheets/mod/style.css' />
 
@@ -15,17 +15,33 @@
 
       <div class="video-bg">
         <video id="video" autoplay loop>
-            <source src="/videos/Adore_You_800kbps.mp4" type="video/mp4">
+            <source src="/videos/Adore_You_720x480_800kbps.mp4" type="video/mp4">
         </video>
       </div>
+
+      <div id="webgl" class="webgl"></div>
 
       <div id="sideWrapperBg" class="side-wrapper-bg slide"></div>
       <div id="sideWrapper" class="side-wrapper slide">
         <!-- data from socket.js -->
-        <div id="dataDiv"></div>
+        <div id="dataDiv" class="data-div"></div>
       </div>
 
-      <div id="webgl" class="webgl"></div>
+      <div id="promoWrapper" class="promo-wrapper slide">
+        <div class="promo-wrapper-bg"></div>
+        <div class="promo-title-bg"></div>
+        <div class="promo-inner">
+          <h1>#Love</h1>
+          <h2>What is #Love?</h2>
+          <p>A live stream that tracks worldwide mentions of <span class="love">#love</span> using npm Twitter, and Twitters streaming API.<br/>
+            <br/>
+            Anytime anyone, anywhere in the world tweets <span class="love">#love</span> a new heart gets added.<br/>
+            <br/>
+            All live tweets can be viewed in the panel on the left.</p>
+
+            <a class="transition" href="http://pauliescanlon.io" target="_blank">pauliescanlon.io</a>
+        </div>
+      </div>
 
       <div id="playPauseButton" class="fab-button play-pause-button slide">
         <div id="spinner" class="spinner"></div>
@@ -35,7 +51,10 @@
         </div>
       </div>
 
-      <div id="fullScreen" class="fab-button full-screen-button transition"></div>
+      <div id="fullScreen" class="fab-button full-screen-button transition">
+        <div id="fullScreenOut" class="full-screen-out transition"></div>
+        <div id="fullScreenIn" class="full-screen-in transition opac0"></div>
+      </div>
 
 
     <!-- Node modules -->
@@ -44,31 +63,18 @@
     <!-- Libraries -->
     <script type="text/javascript" src="javascripts/lib/typedarray.js"></script>
     <script type="text/javascript" src="javascripts/lib/three.min.js"></script>
-    <script type="text/javascript" src="javascripts/lib/ColladaLoader.js"></script>
-    <script type="text/javascript" src="javascripts/lib/BokehShader2.js"></script>
-
-    <!-- <script type="text/javascript" src="javascripts/lib/TweenMax.min.js"></script> -->
-
-    <!-- <script type="text/javascript" src="javascripts/lib/physi.js"></script>
-    <script type="text/javascript" src="javascripts/lib/physijs_worker.js"></script> -->
-
 
     <!-- Modules -->
     <script type="text/javascript" src="/javascripts/mod/utils.js"></script>
     <script type="text/javascript" src="/javascripts/mod/socket.js"></script>
 
     <script type="text/javascript" src="/javascripts/mod/jsonLoader.js"></script>
-    <script type="text/javascript" src="/javascripts/mod/colladaLoader.js"></script>
     <script type="text/javascript" src="/javascripts/mod/hearts.js"></script>
     <script type="text/javascript" src="/javascripts/mod/environment.js"></script>
 
-
-    <script type="text/javascript" src="/javascripts/mod/cube.js"></script>
     <script type="text/javascript" src="/javascripts/mod/lights.js"></script>
     <script type="text/javascript" src="/javascripts/mod/camera.js"></script>
     <script type="text/javascript" src="/javascripts/mod/renderer.js"></script>
-    <script type="text/javascript" src="/javascripts/mod/postProcessing.js"></script>
-
     <script type="text/javascript" src="/javascripts/mod/init.js"></script>
 
 
