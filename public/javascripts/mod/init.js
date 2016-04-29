@@ -10,7 +10,8 @@ var App = App || {};
     connectCalled: false,
     menuStatus: "in",
     hidden: false,
-    media: ""
+    media: "",
+    navStatus: "closed"
     // webGLWidth: document.getElementById("webgl").offsetWidth,
     // webGLHeight: document.getElementById("webgl").offsetHeight
   };
@@ -36,7 +37,18 @@ var App = App || {};
     App.dom.fullScreenOut = document.getElementById('fullScreenOut');
     App.dom.fullScreenIn = document.getElementById('fullScreenIn');
     App.dom.promoWrapper = document.getElementById('promoWrapper');
+
+
+    App.dom.navButton = document.getElementById('navButton');
+    App.dom.navOpen = document.getElementById('navOpen');
+    App.dom.navClose = document.getElementById('navClose');
+    App.dom.promoInner = document.getElementById('promoInner');
+
+    // App.dom.navOpen = document.getElementById('navOpen');
+    // App.dom.navClose = document.getElementById('navClose');
     App.dom.webgl = document.getElementById("webgl");
+
+
 
     Modernizr.on('videoautoplay', function(result) {
       App.log("Modernizr.on.videoautoplay "+result);
@@ -77,6 +89,26 @@ var App = App || {};
   App.addListeners = function(){
     App.log("App.addListeners");
 
+
+    App.dom.navButton.addEventListener('click', function(){
+      if(App.config.navStatus == "closed"){
+        App.config.navStatus = "open";
+
+        App.dom.promoInner.style.maxHeight = 400+'px'
+        App.dom.navOpen.style.opacity = 0;
+        App.dom.navClose.style.opacity = 1;
+        // App.dom.promoWrapper.style.marginBottom = 20+'px'
+
+      }else{
+        App.config.navStatus = "closed";
+        App.dom.promoInner.style.maxHeight = 0+'px';
+        App.dom.navOpen.style.opacity = 1;
+        App.dom.navClose.style.opacity = 0;
+        // App.dom.promoWrapper.style.marginBottom = 180+'px'
+      }
+      // App.log("navClicked");
+    });
+
     App.dom.toggle.addEventListener('click', function(){
       App.pauseApp("click");
     });
@@ -100,7 +132,7 @@ var App = App || {};
         App.dom.promoWrapper.style.bottom = 30+'px'
       }
 
-      App.log("fullscreen - clicked");
+      // App.log("fullscreen - clicked");
     });
 
     document.addEventListener("visibilitychange", function() {
@@ -127,7 +159,7 @@ var App = App || {};
     App.dom.video.setAttribute("id", "video");
     // App.dom.video.setAttribute("autoplay", true);
     App.dom.video.setAttribute("loop", true);
-    App.dom.video.setAttribute('poster','/videos/Adore_You_720x480.jpg');
+    // App.dom.video.setAttribute('poster','/videos/Adore_You_720x480.jpg');
 
     App.dom.vidSource = document.createElement("source");
     App.dom.vidSource.type = "video/mp4";

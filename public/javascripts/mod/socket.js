@@ -40,11 +40,9 @@ var App = App || {};
   * @return {void}
   */
   App.socket.callOnce = function (){
-    App.log("App.socket.callOnce");
     if(App.config.connectCalled == false){
-      App.dom[App.config.media].play();
-      // App.dom.video.play();
-      // App.dom.audio.play();
+      App.log("App.socket.callOnce");
+      if(App.dom[App.config.media])App.dom[App.config.media].play();
       App.dom.spinner.style.display = "none";
       App.dom.toggle.style.display = "block";
       App.dom.pauseIcon.style.display = "block";
@@ -102,15 +100,15 @@ var App = App || {};
     // }
 
     if (colors.indexOf("#love") > -1) {
-        str = str.replace(/#love/g, '<span class="love">#Love</span>');
+        str = str.replace(/#love/g, '<span class="love">#love</span>');
     }
 
     if (colors.indexOf("#Love") > -1) {
-        str = str.replace(/#Love/g, '<span class="love">#Love</span>');
+        str = str.replace(/#Love/g, '<span class="love">#love</span>');
     }
 
     if (colors.indexOf("#LOVE") > -1) {
-        str = str.replace(/#LOVE/g, '<span class="love">#Love</span>');
+        str = str.replace(/#LOVE/g, '<span class="love">#love</span>');
     }
 
     p.innerHTML = str;

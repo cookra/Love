@@ -13,30 +13,41 @@
   </head>
   <body>
 
-      <div id="videoBg" class="video-bg"></div>
+    <div id="webgl" class="webgl"></div>
 
-      <div id="webgl" class="webgl"></div>
+    <div class="site-wrapper">
 
-      <div id="sideWrapperBg" class="side-wrapper-bg slide"></div>
-      <div id="sideWrapper" class="side-wrapper slide">
-        <!-- data from socket.js -->
-        <div id="dataDiv" class="data-div"></div>
+      <div id="videoBg" class="video-bg">
+        <div id="videoPoster" class="video-poster"><img src="/videos/Adore_You_720x480.jpg"/></div>
       </div>
 
       <div id="promoWrapper" class="promo-wrapper slide">
-        <div class="promo-wrapper-bg"></div>
-        <div class="promo-title-bg"></div>
-        <div class="promo-inner">
-          <h1>#Love</h1>
+
+        <div id="navButton" class="nav-button transition">
+          <div id="navOpen" class="nav-open transition"></div>
+          <div id="navClose" class="nav-close transition opac0"></div>
+        </div>
+
+        <div class="promo-title-bg">
+          <h1>#love</h1>
+        </div>
+        <div id="promoInner"class="promo-inner slide">
+          <div class="promo-inner-bg"></div>
           <h2>What is #Love?</h2>
           <p>A live stream that tracks worldwide mentions of <span class="love">#love</span> using npm Twitter, and Twitters streaming API.<br/>
             <br/>
             Anytime anyone, anywhere in the world tweets <span class="love">#love</span> a new heart gets added.<br/>
             <br/>
-            All live tweets can be viewed in the panel on the left.</p>
+            All live tweets can be viewed in the other panel.</p>
 
             <a class="transition" href="http://pauliescanlon.io" target="_blank">pauliescanlon.io</a>
         </div>
+      </div>
+
+      <div id="sideWrapper" class="side-wrapper slide">
+        <div id="sideWrapperBg" class="side-wrapper-bg slide"></div>
+        <!-- data from socket.js -->
+        <div id="dataDiv" class="data-div"></div>
       </div>
 
       <div id="playPauseButton" class="fab-button play-pause-button slide">
@@ -52,6 +63,7 @@
         <div id="fullScreenIn" class="full-screen-in transition opac0"></div>
       </div>
 
+    </div>
 
     <!-- Node modules -->
     <script  type="text/javascript" src="/socket.io/socket.io.js"></script>
