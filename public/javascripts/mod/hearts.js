@@ -5,7 +5,7 @@ var App = App || {};
     App.hearts.config = {
       heartCount: 0,
       heartScale: 0.6,
-      heartRotYSpeed: 0.01,
+      heartRotYSpeed: 0.005,
       heartPosZSpeed: 0.01
     }
 

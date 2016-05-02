@@ -119,9 +119,9 @@ var App = App || {};
         App.dom.fullScreenOut.style.opacity = 0;
         App.dom.fullScreenIn.style.opacity = 1;
         App.dom.playPauseButton.style.left = 20+'px';
-        App.dom.sideWrapperBg.style.left = -365+'px';
+        App.dom.sideWrapperBg.style.left = 0+'px';
         App.dom.sideWrapper.style.left = -365+'px';
-        App.dom.promoWrapper.style.bottom = -360+'px'
+        App.dom.promoWrapper.style.bottom = -400+'px'
       }else{
         App.config.menuStatus = "in";
         App.dom.fullScreenOut.style.opacity = 1;
