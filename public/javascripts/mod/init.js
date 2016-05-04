@@ -8,10 +8,9 @@ var App = App || {};
     webGLWidth: window.innerWidth,
     webGLHeight: window.innerHeight,
     connectCalled: false,
-    menuStatus: "in",
-    hidden: false,
-    media: "",
-    navStatus: "closed"
+    fsStatus: "normal",
+    navStatus: "closed",
+    media: ""
     // webGLWidth: document.getElementById("webgl").offsetWidth,
     // webGLHeight: document.getElementById("webgl").offsetHeight
   };
@@ -89,22 +88,18 @@ var App = App || {};
   App.addListeners = function(){
     App.log("App.addListeners");
 
-
     App.dom.navButton.addEventListener('click', function(){
       if(App.config.navStatus == "closed"){
         App.config.navStatus = "open";
-
         App.dom.promoInner.style.maxHeight = 400+'px'
         App.dom.navOpen.style.opacity = 0;
         App.dom.navClose.style.opacity = 1;
-        // App.dom.promoWrapper.style.marginBottom = 20+'px'
 
       }else{
         App.config.navStatus = "closed";
         App.dom.promoInner.style.maxHeight = 0+'px';
         App.dom.navOpen.style.opacity = 1;
         App.dom.navClose.style.opacity = 0;
-        // App.dom.promoWrapper.style.marginBottom = 180+'px'
       }
       // App.log("navClicked");
     });
@@ -114,8 +109,10 @@ var App = App || {};
     });
 
     App.dom.fullScreen.addEventListener('click', function(){
-      if(App.config.menuStatus == "in"){
-        App.config.menuStatus = "out";
+      if(App.config.fsStatus == "normal"){
+        /*Enter full screen mode*/
+        App.enterFullScreen(document.documentElement);
+        App.config.fsStatus = "full";
         App.dom.fullScreenOut.style.opacity = 0;
         App.dom.fullScreenIn.style.opacity = 1;
         App.dom.playPauseButton.style.left = 20+'px';
@@ -123,7 +120,9 @@ var App = App || {};
         App.dom.sideWrapper.style.left = -365+'px';
         App.dom.promoWrapper.style.bottom = -400+'px'
       }else{
-        App.config.menuStatus = "in";
+        /*Exit full scren mode*/
+        App.exitFullScreen();
+        App.config.fsStatus = "normal";
         App.dom.fullScreenOut.style.opacity = 1;
         App.dom.fullScreenIn.style.opacity = 0;
         App.dom.playPauseButton.style.left = 290+'px';
@@ -131,8 +130,6 @@ var App = App || {};
         App.dom.sideWrapper.style.left = 0+'px';
         App.dom.promoWrapper.style.bottom = 30+'px'
       }
-
-      // App.log("fullscreen - clicked");
     });
 
     document.addEventListener("visibilitychange", function() {
@@ -141,7 +138,56 @@ var App = App || {};
           App.pauseApp("document");
       }
     });
+    
   }
+
+
+
+  /**
+  * Enter full screen mode
+  *
+  * @method enterFullScreen
+  * @return {void}
+  */
+  App.enterFullScreen = function(element){
+    App.log("App.enterFullScreen");
+
+    if(element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if(element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if(element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    } else if(element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+
+    // Launch fullscreen for browsers that support it!
+    // App.enterFullScreen(document.documentElement); // the whole page
+    // App.enterFullScreen(document.getElementById("videoElement")); // any individual element
+  }
+
+
+  /**
+  * Exit full screen mode
+  *
+  * @method exitFullScreen
+  * @return {void}
+  */
+  App.exitFullScreen = function(){
+    App.log("App.exitFullScreen");
+
+    if(document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if(document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if(document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+
+
+
 
   /**
   * creates background video
@@ -189,9 +235,6 @@ var App = App || {};
 
     App.dom.audio.appendChild(App.dom.audSource);
   }
-
-
-
 
   /**
   * master function to pause all app elements - can be called from button or on visibilityState change
