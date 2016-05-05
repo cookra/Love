@@ -12,7 +12,9 @@ var App = App || {};
   App.socket.init = function(){
     App.log("App.socket.init");
 
-    App.listen = io('http://localhost:3000/');
+
+    // App.listen = io('http://localhost:3000/');
+    App.listen = io('http://pauliescanlon.io:3000/');
 
     App.listen.on('init', function (data) {
       App.log("App.socket.on.connection");

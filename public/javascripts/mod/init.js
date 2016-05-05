@@ -138,7 +138,7 @@ var App = App || {};
           App.pauseApp("document");
       }
     });
-    
+
   }
 
 
