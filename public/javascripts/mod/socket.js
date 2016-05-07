@@ -12,7 +12,6 @@ var App = App || {};
   App.socket.init = function(){
     App.log("App.socket.init");
 
-
     // App.listen = io('http://localhost:3000/');
     App.listen = io('http://pauliescanlon.io:3000/');
 
@@ -20,8 +19,8 @@ var App = App || {};
       App.log("App.socket.on.connection");
       // if stream is connected carry on
       App.config.running = true;
-      App.addListeners();
-      App.renderer.init();
+      // App.addListeners();
+      // App.renderer.init();
     });
 
     App.listen.on('sending-data', function (data) {
@@ -33,6 +32,9 @@ var App = App || {};
       }
     });
 
+      App.listen.on('stream-error', function (data) {
+        App.log(data);
+      });
   }
 
   /**
@@ -42,6 +44,7 @@ var App = App || {};
   * @return {void}
   */
   App.socket.callOnce = function (){
+    App.log("App.socket.calling");
     if(App.config.connectCalled == false){
       App.log("App.socket.callOnce");
       if(App.dom[App.config.media])App.dom[App.config.media].play();

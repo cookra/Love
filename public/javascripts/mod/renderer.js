@@ -13,8 +13,8 @@ var App = App || {};
 
     App.three.renderer = new THREE.WebGLRenderer({alpha: true, antialias:true});
     App.three.renderer.setSize(App.config.webGLWidth, (App.config.webGLHeight));
-    App.three.renderer.shadowMap.enabled;
-    App.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    // App.three.renderer.shadowMap.enabled;
+    // App.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     App.dom.webgl.appendChild(App.three.renderer.domElement);
 
     App.renderer.run();

@@ -68,14 +68,15 @@ var App = App || {};
 
     // step 1
       App.jsonLoader.init();
+      App.addListeners();
 
     // step 2 App.socket.init();
     // socket.init is called from jsonloader callback
-
+      App.socket.init();
 
     // step 3 App.renderer.init();
     // renderer.init is called from socket.init connection callback.
-
+      App.renderer.init();
   };
 
 

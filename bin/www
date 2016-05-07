@@ -27,6 +27,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 
 
+
 /**
 * track from Twitter strea and emit tweet data
 */
@@ -34,21 +35,15 @@ io.sockets.on('connection', function (socket) {
   client.stream('statuses/filter', {track: '#love'},  function(stream){
     stream.on('data', function(obj) {
         clientStream = client.stream;
-        // console.log(tweet.text);
         socket.emit('sending-data', { tweetText: obj.text, userName:obj.user.screen_name });
     });
+
     stream.on('error', function(error) {
-      // console.log(error);
+      socket.emit('stream-error', { message: error });
     });
+
   });
-
-
-  socket.emit('init', { message: "init" });
-
-  // stream.on('connection', function(socket) {
-  //   socket.emit('init', { message: "init" });
-  // }
-
+   socket.emit('init', { message: "init" });
 });
 
 

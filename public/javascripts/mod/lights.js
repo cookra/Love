@@ -22,7 +22,7 @@ var App = App || {};
     App.three.pointLight = new THREE.PointLight( App.lights.config.lightColour, 10, 100 );
     App.three.pointLight.position.set( 50, 50, 50 );
     App.three.pointLight.castShadow = true;
-    App.three.pointLight.shadowCameraVisible = true;
+    // App.three.pointLight.shadowCameraVisible = true;
     App.three.add( App.three.pointLight );
 
 

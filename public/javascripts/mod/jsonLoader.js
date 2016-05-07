@@ -14,15 +14,15 @@ var App = App || {};
 
     /*USE JSONLoader for single models*/
     App.three.goJSON = new THREE.JSONLoader();
+    App.three.goJSON.crossOrigin = '';
+    App.three.goJSON.withCredentials = true;
 
     /*JSON loading manager*/
     // App.three.manager = new THREE.LoadingManager();
 
-    App.three.goJSON.load('/javascripts/mod/lowPolyHeart.json', function(geometry, materials){
     // App.three.goJSON.load('/javascripts/mod/lowPolyHeart.json', function(geometry, materials){
-
-      // var material = new THREE.MultiMaterial(materials);
-      // App.three.masterHeart.geometry = geometry;
+    // App.three.goJSON.load('http://pauliescanlon.io:3000/javascripts/mod/lowPolyHeart.json', function(geometry, materials){
+    App.three.goJSON.load('http://pauliescanlon.io:3000/javascripts/mod/lowPolyHeart.json', function(geometry, materials){
 
       App.heartMaterial = new THREE.MultiMaterial(materials);
       App.heartGeometry = geometry;
@@ -30,12 +30,8 @@ var App = App || {};
       App.three.masterHeart = new THREE.Mesh(App.heartGeometry, App.heartMaterial);
       App.three.add(App.three.masterHeart);
 
-      //callback when object has loaded.
-
-
       App.hearts.init();
-
-      App.socket.init();
+      // App.socket.init();
 
 
     });
