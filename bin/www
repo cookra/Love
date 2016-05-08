@@ -34,7 +34,6 @@ var io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {
   client.stream('statuses/filter', {track: '#love'},  function(stream){
     stream.on('data', function(obj) {
-        clientStream = client.stream;
         socket.emit('sending-data', { tweetText: obj.text, userName:obj.user.screen_name });
     });
 
