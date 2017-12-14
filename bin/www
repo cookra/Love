@@ -20,95 +20,94 @@ app.set('port', port);
  */
 var server = http.createServer(app);
 
-
 /**
-* Create the socket.io object and listener
-*/
+ * Create the socket.io object and listener
+ */
 var io = require('socket.io').listen(server);
 
-
-
 /**
-* Set up the twitter client containing keys and scerets
-*/
+ * Set up the twitter client containing keys and scerets
+ */
 var Twitter = require('twitter');
 
 var users = [];
 var stream = null;
 
 var client = new Twitter({
-  consumer_key: '4yxHTOFqOttfARNdQdJnIpfLO',
-  consumer_secret: 'h2pFcwAGKwISeCaI0be0jKyh4ThlLZWOKjIHMvJLe2bWl7hJqQ',
-  access_token_key: '470012453-4ZXWRfZx7KPY4iccvtQhov1PL9yNOVTvHPg89qqz',
-  access_token_secret: 'Ej3AYPj3za78D8zzMalm5WORD2ET6V7QH9vuT1d2fgbs1'
+	consumer_key: '4yxHTOFqOttfARNdQdJnIpfLO',
+	consumer_secret: 'h2pFcwAGKwISeCaI0be0jKyh4ThlLZWOKjIHMvJLe2bWl7hJqQ',
+	access_token_key: '470012453-4ZXWRfZx7KPY4iccvtQhov1PL9yNOVTvHPg89qqz',
+	access_token_secret: 'Ej3AYPj3za78D8zzMalm5WORD2ET6V7QH9vuT1d2fgbs1'
 });
 
 /**
-* track from Twitter strea and emit tweet data
-*/
-io.sockets.on('connection', function (socket) {
-  // The user it's added to the array if it doesn't exist
-  if (users.indexOf(socket.id) === -1) {
-    users.push(socket.id);
-  }
+ * track from Twitter strea and emit tweet data
+ */
+io.sockets.on('connection', function(socket) {
+	console.log('----socket');
+	// The user it's added to the array if it doesn't exist
+	if (users.indexOf(socket.id) === -1) {
+		users.push(socket.id);
+	}
 
-  // Log
-  logConnectedUsers();
+	// Log
+	logConnectedUsers();
 
-  // The stream will be started only when the 1st user arrives
-  if (stream === null) {
-    client.stream('statuses/filter', {track: '#love'},  function(s){
-      stream = s;
-      stream.on('data', function(obj) {
-        // only broadcast when users are online
-        if (users.length > 0) {
-          // This emits the signal to all users but the one
-          // that started the stream
-          socket.broadcast.emit('sending-data', { tweetText: obj.text, userName:obj.user.screen_name });
-          // This emits the signal to the user that started
-          // the stream
-          socket.emit('sending-data', { tweetText: obj.text, userName:obj.user.screen_name });
-        }
-        else {
-          // If there are no users connected we destroy the stream.
-          // Why would we keep it running for nobody?
-          stream.destroy();
-          stream = null;
-        }
-      });
+	// The stream will be started only when the 1st user arrives
+	if (stream === null) {
+		client.stream('statuses/filter', { track: '#love' }, function(s) {
+			stream = s;
+			stream.on('data', function(obj) {
+				// only broadcast when users are online
+				if (users.length > 0) {
+					// This emits the signal to all users but the one
+					// that started the stream
+					socket.broadcast.emit('sending-data', {
+						tweetText: obj.text,
+						userName: obj.user.screen_name
+					});
+					// This emits the signal to the user that started
+					// the stream
+					socket.emit('sending-data', {
+						tweetText: obj.text,
+						userName: obj.user.screen_name
+					});
+				} else {
+					// If there are no users connected we destroy the stream.
+					// Why would we keep it running for nobody?
+					stream.destroy();
+					stream = null;
+				}
+			});
 
-      stream.on('error', function(error) {
-        socket.broadcast.emit('stream-error', { message: error });
-        socket.emit('stream-error', { message: error });
-      });
+			stream.on('error', function(error) {
+				socket.broadcast.emit('stream-error', { message: error });
+				socket.emit('stream-error', { message: error });
+			});
+		});
+		socket.emit('init', { message: 'init twitter stream for first time' });
+	}
 
-    });
-    socket.emit('init', { message: "init twitter stream for first time" });
-  }
+	socket.emit('init', { message: 'user connected to stream' });
 
-  socket.emit('init', { message: "user connected to stream" });
-
-
-  // This handles when a user is disconnected
-  socket.on("disconnect", function(o) {
-    // find the user in the array
-    var index = users.indexOf(socket.id);
-    if(index != -1) {
-        // Eliminates the user from the array
-        users.splice(index, 1);
-    }
-    logConnectedUsers();
-  });
+	// This handles when a user is disconnected
+	socket.on('disconnect', function(o) {
+		// find the user in the array
+		var index = users.indexOf(socket.id);
+		if (index != -1) {
+			// Eliminates the user from the array
+			users.splice(index, 1);
+		}
+		logConnectedUsers();
+	});
 });
 
 // A log function for debugging purposes
 function logConnectedUsers() {
-    console.log("============= CONNECTED USERS ==============");
-    console.log("==  ::  " + users.length);
-    console.log("============================================");
+	console.log('============= CONNECTED USERS ==============');
+	console.log('==  ::  ' + users.length);
+	console.log('============================================');
 }
-
-
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -123,19 +122,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+	var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+	if (isNaN(port)) {
+		// named pipe
+		return val;
+	}
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+	if (port >= 0) {
+		// port number
+		return port;
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -143,27 +142,25 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+	if (error.syscall !== 'listen') {
+		throw error;
+	}
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+	var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+	// handle specific listen errors with friendly messages
+	switch (error.code) {
+		case 'EACCES':
+			console.error(bind + ' requires elevated privileges');
+			process.exit(1);
+			break;
+		case 'EADDRINUSE':
+			console.error(bind + ' is already in use');
+			process.exit(1);
+			break;
+		default:
+			throw error;
+	}
 }
 
 /**
@@ -171,9 +168,9 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+	console.log('---onListening');
+	var addr = server.address();
+	var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+	debug('Listening on ' + bind);
+	console.log(bind);
 }

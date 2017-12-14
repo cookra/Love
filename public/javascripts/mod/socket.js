@@ -1,122 +1,118 @@
 var App = App || {};
-    App.socket = App.socket || {};
-    App.dom = App.dom || {};
+App.socket = App.socket || {};
+App.dom = App.dom || {};
 
+/**
+ * called by socket.init creates socket io connection and listening / emit events.
+ *
+ * @method init
+ * @return {void}
+ */
+App.socket.init = function() {
+	App.log('App.socket.init');
 
-  /**
-  * called by socket.init creates socket io connection and listening / emit events.
-  *
-  * @method init
-  * @return {void}
-  */
-  App.socket.init = function(){
-    App.log("App.socket.init");
+	App.listen = io('http://localhost:3000/');
 
-    // App.listen = io('http://localhost:3000/');
-    App.listen = io('http://pauliescanlon.io:3000/');
+	App.listen.on('init', function(data) {
+		App.log('App.socket.on.connection');
+		// if stream is connected carry on
+		App.config.running = true;
+		// App.addListeners();
+		// App.renderer.init();
+	});
 
-    App.listen.on('init', function (data) {
-      App.log("App.socket.on.connection");
-      // if stream is connected carry on
-      App.config.running = true;
-      // App.addListeners();
-      // App.renderer.init();
-    });
+	App.listen.on('sending-data', function(data) {
+		if (App.config.running === true) {
+			App.socket.callOnce();
+			App.socket.createDomElement(data);
+			App.hearts.clone();
+			// App.socket.checkActiveTab();
+		}
+	});
 
-    App.listen.on('sending-data', function (data) {
-    if(App.config.running === true){
-        App.socket.callOnce();
-        App.socket.createDomElement(data);
-        App.hearts.clone();
-        // App.socket.checkActiveTab();
-      }
-    });
+	App.listen.on('stream-error', function(data) {
+		App.log(data);
+	});
+};
 
-      App.listen.on('stream-error', function (data) {
-        App.log(data);
-      });
-  }
+/**
+ * sets buttons and spinners up but on call rather than on connect, needs the 'called' flag
+ *
+ * @method socket.callOnce
+ * @return {void}
+ */
+App.socket.callOnce = function() {
+	App.log('App.socket.calling');
+	if (App.config.connectCalled == false) {
+		App.log('App.socket.callOnce');
+		if (App.dom[App.config.media]) App.dom[App.config.media].play();
+		App.dom.spinner.style.display = 'none';
+		App.dom.toggle.style.display = 'block';
+		App.dom.pauseIcon.style.display = 'block';
+		App.config.connectCalled = true;
+	}
+};
 
-  /**
-  * sets buttons and spinners up but on call rather than on connect, needs the 'called' flag
-  *
-  * @method socket.callOnce
-  * @return {void}
-  */
-  App.socket.callOnce = function (){
-    App.log("App.socket.calling");
-    if(App.config.connectCalled == false){
-      App.log("App.socket.callOnce");
-      if(App.dom[App.config.media])App.dom[App.config.media].play();
-      App.dom.spinner.style.display = "none";
-      App.dom.toggle.style.display = "block";
-      App.dom.pauseIcon.style.display = "block";
-      App.config.connectCalled = true;
-    }
-  }
+/**
+ * called on data received from socket, creates and appends dom elements.
+ *
+ * @method createDomElement
+ * @return {void}
+ */
 
+App.socket.createDomElement = function(data) {
+	var tweetEle = document.createElement('div');
+	tweetEle.id = 'tweetEle';
+	tweetEle.className = 'tweet-ele transition';
+	// tweetEle.style.backgroundColor = "#e41969";
 
-  /**
-  * called on data received from socket, creates and appends dom elements.
-  *
-  * @method createDomElement
-  * @return {void}
-  */
+	var tweetEleBg = document.createElement('div');
+	tweetEleBg.className = 'tweet-ele-bg';
+	tweetEle.appendChild(tweetEleBg);
 
-  App.socket.createDomElement = function(data){
-    var tweetEle = document.createElement('div');
-    tweetEle.id = "tweetEle"
-    tweetEle.className = "tweet-ele transition"
-    // tweetEle.style.backgroundColor = "#e41969";
+	var h2 = document.createElement('h2');
+	tweetEle.appendChild(h2);
+	h2.innerHTML = data.userName;
 
-    var tweetEleBg = document.createElement('div');
-    tweetEleBg.className = "tweet-ele-bg";
-    tweetEle.appendChild(tweetEleBg);
+	var p = document.createElement('p');
+	tweetEle.appendChild(p);
+	p.innerHTML = data.tweetText;
 
-    var h2 = document.createElement('h2');
-    tweetEle.appendChild(h2);
-    h2.innerHTML = data.userName;
+	var str = p.innerHTML,
+		reg = /love|Love|#love|#Love/gi; //g is to replace all occurances
 
-    var p = document.createElement('p');
-    tweetEle.appendChild(p);
-    p.innerHTML = data.tweetText;
+	//fixing a bit
+	var toStr = String(reg);
+	var color = toStr.replace('/g', '|').substring(1);
 
+	//split it baby
+	var colors = color.split('|');
 
-    var str = p.innerHTML,
-    reg = /love|Love|#love|#Love/ig; //g is to replace all occurances
+	// if (colors.indexOf("love") > -1) {
+	//     str = str.replace(/love/g, '<span class="love">Love</span>');
+	// }
+	//
+	// if (colors.indexOf("Love") > -1) {
+	//     str = str.replace(/Love/g, '<span class="love">Love</span>');
+	// }
+	//
+	// if (colors.indexOf("LOVE") > -1) {
+	//     str = str.replace(/LOVE/g, '<span class="love">Love</span>');
+	// }
 
-    //fixing a bit
-    var toStr = String(reg);
-    var color = (toStr.replace('\/g', '|')).substring(1);
+	if (colors.indexOf('#love') > -1) {
+		str = str.replace(/#love/g, '<span class="love">#love</span>');
+	}
 
-    //split it baby
-    var colors = color.split("|");
+	if (colors.indexOf('#Love') > -1) {
+		str = str.replace(/#Love/g, '<span class="love">#love</span>');
+	}
 
-    // if (colors.indexOf("love") > -1) {
-    //     str = str.replace(/love/g, '<span class="love">Love</span>');
-    // }
-    //
-    // if (colors.indexOf("Love") > -1) {
-    //     str = str.replace(/Love/g, '<span class="love">Love</span>');
-    // }
-    //
-    // if (colors.indexOf("LOVE") > -1) {
-    //     str = str.replace(/LOVE/g, '<span class="love">Love</span>');
-    // }
+	if (colors.indexOf('#LOVE') > -1) {
+		str = str.replace(/#LOVE/g, '<span class="love">#love</span>');
+	}
 
-    if (colors.indexOf("#love") > -1) {
-        str = str.replace(/#love/g, '<span class="love">#love</span>');
-    }
+	p.innerHTML = str;
 
-    if (colors.indexOf("#Love") > -1) {
-        str = str.replace(/#Love/g, '<span class="love">#love</span>');
-    }
-
-    if (colors.indexOf("#LOVE") > -1) {
-        str = str.replace(/#LOVE/g, '<span class="love">#love</span>');
-    }
-
-    p.innerHTML = str;
-
-    App.dom.dataDiv.insertBefore(tweetEle, App.dom.dataDiv.childNodes[0]);
-  }
+	App.dom.dataDiv.insertBefore(tweetEle, App.dom.dataDiv.childNodes[0]);
+};
